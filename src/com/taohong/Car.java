@@ -9,14 +9,13 @@ public class Car {
     private int ticketNum;
     private boolean isParkedHere;
 
-    public boolean isParkedHere() {
-        return isParkedHere;
-    }
-
-    public void setParkedHere(boolean parkedHere) {
-        isParkedHere = parkedHere;
-    }
-
+    /**
+     * Constructor for Car
+     *
+     * @param carNum    The license plate number of the give car.
+     * @param ticketNum The ticket number of the parking
+     * @param spaceNum  The number of space where the car is parking
+     */
     public Car(String carNum, int ticketNum, int spaceNum) {
         this.carNum = carNum;
         this.ticketNum = ticketNum;
@@ -24,20 +23,13 @@ public class Car {
         isParkedHere = true;
     }
 
+
     public String getCarNum() {
         return carNum;
     }
 
-    public void setCarNum(String carNum) {
-        this.carNum = carNum;
-    }
-
     public int getTicketNum() {
         return ticketNum;
-    }
-
-    public void setTicketNum(int ticketNum) {
-        this.ticketNum = ticketNum;
     }
 
     public int getSpaceNum() {
@@ -46,5 +38,13 @@ public class Car {
 
     public void setSpaceNum(int spaceNum) {
         this.spaceNum = spaceNum;
+    }
+
+    public boolean isParkedHere() {
+        return isParkedHere;
+    }
+
+    public void setParkedHere(boolean parkedHere) {
+        isParkedHere = parkedHere;
     }
 }
