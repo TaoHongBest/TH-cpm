@@ -1,7 +1,6 @@
 package com.taohong;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -9,17 +8,19 @@ import java.util.HashMap;
  * @author taohong on 2019-01-15
  */
 public class CPM {
-    int tickNumBase = 5000;
-    int emptyNum = 0;
-    ArrayList<Space> cpmList = new ArrayList<>();
-    HashMap<String, Car> carMap = new HashMap<>();
-    HashMap<Integer, Ticket> tickMap = new HashMap<>();
+    private int tickNumBase = 5000;
+    private int emptyNum = 0;
+    private boolean isCompacted;
+    private ArrayList<Space> cpmList = new ArrayList<>();
+    private HashMap<String, Car> carMap = new HashMap<>();
+    private HashMap<Integer, Ticket> tickMap = new HashMap<>();
 
     public CPM() {
         for (int i = 0; i < 10; i++) {
             cpmList.add(new Space(i));
             emptyNum++;
         }
+        isCompacted = true;
     }
 
     // Accept instructions for parking, unparking & compacting
@@ -36,7 +37,6 @@ public class CPM {
                 break;
             default:
         }
-
     }
 
     /**
@@ -52,15 +52,15 @@ public class CPM {
         }
 
         // return if the give is still parked here
-        if (carMap.containsKey(str) && carMap.get(str).isParkedHere) {
+        if (carMap.containsKey(str) && carMap.get(str).isParkedHere()) {
             System.out.println("Invalid Car Number: This car '" + str + "' has been parked here!");
             return;
         }
 
         // park the car, update tickets and spaces
         for (Space sp : cpmList) {
-            if (!sp.isOccupied) {
-                sp.occupySpace();
+            if (!sp.isOccupied()) {
+                sp.setOccupied(true);
                 int tickNum = tickNumBase++;
                 int spaceNum = sp.getSpaceNum();
                 Ticket tick = new Ticket(tickNum, str, spaceNum);
@@ -68,14 +68,13 @@ public class CPM {
                 if (!carMap.containsKey(str)) {
                     Car car = new Car(str, tickNum, spaceNum);
                     carMap.put(str, car);
-                } else if (!carMap.get(str).isParkedHere) {
-                    carMap.get(str).isParkedHere = true;
+                } else if (!carMap.get(str).isParkedHere()) {
+                    carMap.get(str).setParkedHere(true);
                 }
 
                 tickMap.put(tickNum, tick);
                 sp.setCarNum(str);
-                sp.setTicketNum(spaceNum);
-                sp.isOccupied = true;
+                sp.setTickNum(tickNum);
                 emptyNum--;
                 break;
             }
@@ -89,10 +88,14 @@ public class CPM {
      */
     private void unparkCar(String str) {
         Integer tickStrNum = Integer.parseInt(str);
+
         if (tickMap.containsKey(tickStrNum)) {
-            carMap.remove(tickMap.get(tickStrNum).getCarNum());
-            cpmList.get(tickMap.get(tickStrNum).spaceNum).isOccupied = false;
+            Ticket tickTmp = tickMap.get(tickStrNum);
+
+            carMap.remove(tickTmp.getCarNum());
+            cpmList.get((tickTmp).getSpaceNum()).setOccupied(false);
             tickMap.remove(tickStrNum);
+            emptyNum++;
         } else {
             System.out.println("Invalid Ticket Number: The ticket of given number '" + tickStrNum + "' dose not exist!");
         }
@@ -102,18 +105,19 @@ public class CPM {
      * This method compacts the fragmented spaces
      */
     private void compact() {
-        boolean isCompacted = false;
+        isCompacted = false;
         int i = 0;
         while (!isCompacted) {
-            if (!cpmList.get(i).isOccupied) {
+            if (!cpmList.get(i).isOccupied()) {
+                boolean findOccupied = false;
                 for (int j = i + 1; j < 10; j++) {
-                    if (cpmList.get(j).isOccupied) {
-                        Collections.swap(cpmList, i, j);
-                        i = j;
+                    if (cpmList.get(j).isOccupied()) {
+                        Collections.swap(cpmList, i++, j);
+                        findOccupied = true;
                         break;
                     }
                 }
-                isCompacted = true;
+                if (!findOccupied) isCompacted = true;
             } else {
                 i++;
             }
@@ -129,12 +133,11 @@ public class CPM {
     public String displayResult() {
         StringBuilder sb = new StringBuilder();
         for (Space sp : cpmList) {
-            if (sp.isOccupied) {
+            if (sp.isOccupied()) {
                 sb.append(sp.getCarNum());
             }
             sb.append(",");
         }
-
         return sb.toString();
     }
 }
