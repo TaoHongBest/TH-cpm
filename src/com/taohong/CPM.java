@@ -8,13 +8,16 @@ import java.util.HashMap;
  * @author taohong on 2019-01-15
  */
 public class CPM {
-    private int tickNumBase = 5000;
+    private int tickNumBase = 5000; // Starting number of tickets. It increments 1 after a ticket is generated.
     private int emptyNum = 0;
     private boolean isCompacted;
     private ArrayList<Space> cpmList = new ArrayList<>();
     private HashMap<String, Car> carMap = new HashMap<>();
     private HashMap<Integer, Ticket> tickMap = new HashMap<>();
 
+    /**
+     * Constructor of CPM (Car Park Manager)
+     */
     public CPM() {
         for (int i = 0; i < 10; i++) {
             cpmList.add(new Space(i));
@@ -112,8 +115,10 @@ public class CPM {
                 boolean findOccupied = false;
                 for (int j = i + 1; j < 10; j++) {
                     if (cpmList.get(j).isOccupied()) {
-                        Collections.swap(cpmList, i++, j);
+                        Collections.swap(cpmList, i, j);
+                        updateSpaceCarTicket(i);
                         findOccupied = true;
+                        i++;
                         break;
                     }
                 }
@@ -123,6 +128,19 @@ public class CPM {
             }
             if (i == 9) isCompacted = true;
         }
+    }
+
+    /**
+     * This methods updates space number in Space, Car and Ticket after each swap
+     *
+     * @param i The new space number after compacting.
+     */
+    private void updateSpaceCarTicket(int i) {
+        String carNum = cpmList.get(i).getCarNum();
+        Integer tickNum = cpmList.get(i).getTickNum();
+        cpmList.get(i).setSpaceNum(i);
+        carMap.get(carNum).setSpaceNum(i);
+        tickMap.get(tickNum).setSpaceNum(i);
     }
 
     /**
