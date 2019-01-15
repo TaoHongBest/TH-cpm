@@ -1,6 +1,8 @@
 package com.taohong;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -12,7 +14,6 @@ public class CPM {
     ArrayList<Space> cpmList = new ArrayList<>();
     HashMap<String, Car> carMap = new HashMap<>();
     HashMap<Integer, Ticket> tickMap = new HashMap<>();
-
 
     public CPM() {
         for (int i = 0; i < 10; i++) {
@@ -82,7 +83,7 @@ public class CPM {
     }
 
     /**
-     * This method unpark the car if car is parked here. And then let the space available again
+     * This method unparks the car if car is parked here. And then let the space available again
      *
      * @param str the number of given ticket
      */
@@ -97,12 +98,31 @@ public class CPM {
         }
     }
 
+    /**
+     * This method compacts the fragmented spaces
+     */
     private void compact() {
-
+        boolean isCompacted = false;
+        int i = 0;
+        while (!isCompacted) {
+            if (!cpmList.get(i).isOccupied) {
+                for (int j = i + 1; j < 10; j++) {
+                    if (cpmList.get(j).isOccupied) {
+                        Collections.swap(cpmList, i, j);
+                        i = j;
+                        break;
+                    }
+                }
+                isCompacted = true;
+            } else {
+                i++;
+            }
+            if (i == 9) isCompacted = true;
+        }
     }
 
     /**
-     * This method return the result of given output form
+     * This method returns the result of given output form
      *
      * @return the string fo result
      */
