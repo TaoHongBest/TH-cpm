@@ -4,10 +4,18 @@ package com.taohong;
  * @author taohong on 2019-01-15
  */
 public class Car {
-    String carNum;
-    int spaceNum;
-    int ticketNum;
-    boolean isParkedHere;
+    private String carNum;
+    private int spaceNum;
+    private int ticketNum;
+    private boolean isParkedHere;
+
+    public boolean isParkedHere() {
+        return isParkedHere;
+    }
+
+    public void setParkedHere(boolean parkedHere) {
+        isParkedHere = parkedHere;
+    }
 
     public Car(String carNum, int ticketNum, int spaceNum) {
         this.carNum = carNum;
