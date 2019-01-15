@@ -4,10 +4,14 @@ package com.taohong;
  * @author taohong on 2019-01-15
  */
 public class Ticket {
-    int ticketNum;
-    int spaceNum;
-    String carNum;
-    boolean isParking;
+    private int ticketNum;
+    private int spaceNum;
+    private String carNum;
+    private boolean isParking;
+
+    public int getSpaceNum() {
+        return spaceNum;
+    }
 
     public Ticket(int ticketNum, String carNum, int sapceNum) {
         this.ticketNum = ticketNum;
