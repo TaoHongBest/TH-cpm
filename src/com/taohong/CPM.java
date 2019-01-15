@@ -25,13 +25,17 @@ public class CPM {
     public void accept(String str) {
         switch (str.charAt(0)) {
             case 'p':
-                parkCar(str.substring(1, 4));
+                parkCar(str.substring(1));
+                break;
             case 'u':
                 unparkCar(str.substring(1));
+                break;
             case 'c':
                 compact();
+                break;
             default:
         }
+
     }
 
     /**
@@ -77,8 +81,20 @@ public class CPM {
         }
     }
 
-    private void unparkCar(String substring) {
-
+    /**
+     * This method unpark the car if car is parked here. And then let the space available again
+     *
+     * @param str the number of given ticket
+     */
+    private void unparkCar(String str) {
+        Integer tickStrNum = Integer.parseInt(str);
+        if (tickMap.containsKey(tickStrNum)) {
+            carMap.remove(tickMap.get(tickStrNum).getCarNum());
+            cpmList.get(tickMap.get(tickStrNum).spaceNum).isOccupied = false;
+            tickMap.remove(tickStrNum);
+        } else {
+            System.out.println("Invalid Ticket Number: The ticket of given number '" + tickStrNum + "' dose not exist!");
+        }
     }
 
     private void compact() {
@@ -86,6 +102,8 @@ public class CPM {
     }
 
     /**
+     * This method return the result of given output form
+     *
      * @return the string fo result
      */
     public String displayResult() {
