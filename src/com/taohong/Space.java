@@ -43,10 +43,6 @@ public class Space {
         return isOccupied;
     }
 
-    public void releaseSpace() {
-        isOccupied = false;
-    }
-
     public void setOccupied(boolean occupied) {
         isOccupied = occupied;
     }
