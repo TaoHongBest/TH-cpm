@@ -4,10 +4,11 @@ package com.taohong;
  * @author taohong on 2019-01-15
  */
 public class Space {
-    int spaceNum;
-    String carNum;
-    int ticketNum;
-    boolean isOccupied;
+    private int spaceNum;
+    private String carNum;
+    private int tickNum;
+    private boolean isOccupied;
+
 
     public Space(int spaceNum) {
         this.spaceNum = spaceNum;
@@ -30,12 +31,12 @@ public class Space {
         this.carNum = carNum;
     }
 
-    public int getTicketNum() {
-        return ticketNum;
+    public int getTickNum() {
+        return tickNum;
     }
 
-    public void setTicketNum(int ticketNum) {
-        this.ticketNum = ticketNum;
+    public void setTickNum(int tickNum) {
+        this.tickNum = tickNum;
     }
 
     public boolean isOccupied() {
@@ -46,11 +47,7 @@ public class Space {
         isOccupied = false;
     }
 
-    public void occupySpace() {
-        isOccupied = true;
-    }
-
-    public void createTicket(String carNum) {
-
+    public void setOccupied(boolean occupied) {
+        isOccupied = occupied;
     }
 }
