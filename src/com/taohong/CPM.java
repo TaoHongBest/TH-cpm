@@ -9,11 +9,11 @@ import java.util.HashMap;
  */
 public class CPM {
     private int tickNumBase = 5000; // Starting number of tickets. It increments 1 after a ticket is generated.
-    private int emptyNum = 0;
-    private boolean isCompacted;
-    private ArrayList<Space> cpmList = new ArrayList<>();
-    private HashMap<String, Car> carMap = new HashMap<>();
-    private HashMap<Integer, Ticket> tickMap = new HashMap<>();
+    private int emptyNum = 0; // Number of empty spaces in the car park
+    private boolean isCompacted; // Boolean value indicates whether the park is compacted. TODO: alter unpark() to auto-update isCompacted
+    private ArrayList<Space> cpmList = new ArrayList<>(); // List of ten spaces in the park
+    private HashMap<String, Car> carMap = new HashMap<>(); // HashMap of cars
+    private HashMap<Integer, Ticket> tickMap = new HashMap<>(); // HashMap of tickets
 
     /**
      * Constructor of CPM (Car Park Manager)
@@ -64,6 +64,7 @@ public class CPM {
         for (Space sp : cpmList) {
             if (!sp.isOccupied()) {
                 sp.setOccupied(true);
+                // If found an available space, generate a new ticket.
                 int tickNum = tickNumBase++;
                 int spaceNum = sp.getSpaceNum();
                 Ticket tick = new Ticket(tickNum, str, spaceNum);
@@ -75,6 +76,7 @@ public class CPM {
                     carMap.get(str).setParkedHere(true);
                 }
 
+                // Put the ticket to the HashMap of tickets
                 tickMap.put(tickNum, tick);
                 sp.setCarNum(str);
                 sp.setTickNum(tickNum);
@@ -95,8 +97,11 @@ public class CPM {
         if (tickMap.containsKey(tickStrNum)) {
             Ticket tickTmp = tickMap.get(tickStrNum);
 
+            // Remove the car associated with the given ticket from the car HashMap.
             carMap.remove(tickTmp.getCarNum());
+            // Set the 'isOccupied' of the space to false, indicating the space is available again.
             cpmList.get((tickTmp).getSpaceNum()).setOccupied(false);
+            // Remove the ticket from the HasHmap of tickets.
             tickMap.remove(tickStrNum);
             emptyNum++;
         } else {
@@ -111,18 +116,18 @@ public class CPM {
         isCompacted = false;
         int i = 0;
         while (!isCompacted) {
-            if (!cpmList.get(i).isOccupied()) {
+            if (!cpmList.get(i).isOccupied()) { // Find an empty space.
                 boolean findOccupied = false;
-                for (int j = i + 1; j < 10; j++) {
-                    if (cpmList.get(j).isOccupied()) {
-                        Collections.swap(cpmList, i, j);
-                        updateSpaceCarTicket(i);
+                for (int j = i + 1; j < 10; j++) { // Traverse the rest spaces after the above empty space.
+                    if (cpmList.get(j).isOccupied()) { // Find the first occupied space after above empty one.
+                        Collections.swap(cpmList, i, j); // Swap the first occupied space and the above empty one.
+                        updateSpaceCarTicket(i); // Call method to update space number in Space, Car and Ticket.
                         findOccupied = true;
                         i++;
                         break;
                     }
                 }
-                if (!findOccupied) isCompacted = true;
+                if (!findOccupied) isCompacted = true; // if findOccupied is false, it means the rest spaces are all empty.
             } else {
                 i++;
             }
