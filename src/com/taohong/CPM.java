@@ -50,13 +50,13 @@ public class CPM {
     private void parkCar(String str) {
         // return if no more available space
         if (emptyNum < 1) {
-            System.out.println("No available space!");
+//            System.out.println("No available space!");
             return;
         }
 
         // return if the give is still parked here
         if (carMap.containsKey(str) && carMap.get(str).isParkedHere()) {
-            System.out.println("Invalid Car Number: This car '" + str + "' has been parked here!");
+//            System.out.println("Invalid Car Number: This car '" + str + "' has been parked here!");
             return;
         }
 
@@ -100,7 +100,7 @@ public class CPM {
             tickMap.remove(tickStrNum);
             emptyNum++;
         } else {
-            System.out.println("Invalid Ticket Number: The ticket of given number '" + tickStrNum + "' dose not exist!");
+//            System.out.println("Invalid Ticket Number: The ticket of given number '" + tickStrNum + "' dose not exist!");
         }
     }
 
